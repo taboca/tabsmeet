@@ -6,9 +6,17 @@ function setScreenshotUrl(url) {
   document.getElementById('target').src = url;
 }
 
-function setTabsTitle(title) { 
- 
+function setTabsTitle(title, link, description) {
+
   var dd = document.createElement('h2');
   dd.innerHTML=title;
   document.body.appendChild(dd);
+
+  var pp = document.createElement('p');
+  var dd = document.createElement('a');
+  dd.innerHTML=description;
+  dd.setAttribute('href',link);
+  pp.appendChild(dd);
+  document.getElementById('markup').appendChild(pp);
+
 }

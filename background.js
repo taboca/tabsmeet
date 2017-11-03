@@ -14,18 +14,17 @@ chrome.browserAction.onClicked.addListener(function(e) {
 
 let list = [];
 let cc=0;
-chrome.tabs.query({highlighted: true}, function (tabs) { 
- for(item in tabs) { 
+chrome.tabs.query({highlighted: true}, function (tabs) {
+ for(item in tabs) {
 	cc++;
  	let tab = tabs[item];
-	list.push(tab.url + '['+cc+']');
+	//list.push(tab.url + '['+cc+']');
+	list.push({'markdown':'['+tab.title+']('+ tab.url + ')\n\n', 'link': tab.url, 'description':tab.title});
  }
 });
 
 
   chrome.tabs.captureVisibleTab(function(screenshotUrl) {
-
-
 
     var viewTabUrl = chrome.extension.getURL('screenshot.html?id=' + id++)
     var targetId = null;
@@ -52,17 +51,20 @@ chrome.tabs.query({highlighted: true}, function (tabs) {
         if (view.location.href == viewTabUrl) {
 
 
-chrome.tabs.getAllInWindow(null, function(tabs){
-    //for (var i = 0; i < tabs.length; i++) {
-    for (var i = 0; i < list.length; i++) {
-          //view.setTabsTitle(tabs[i].title + '/' + tabs[i].active); 
-          view.setTabsTitle(list[i]) 
-    }
-});
+              chrome.tabs.getAllInWindow(null, function(tabs){
+                  //for (var i = 0; i < tabs.length; i++) {
+                  for (var i = 0; i < list.length; i++) {
+                        //view.setTabsTitle(tabs[i].title + '/' + tabs[i].active);
+                        var item = list[i];
+                        view.setTabsTitle(item['markdown'], item['link'], item['description'] )
+
+                  }
+              });
 
 
-          view.setScreenshotUrl(screenshotUrl);
-          break;
+              view.setScreenshotUrl(screenshotUrl);
+              break;
+
         }
       }
     });
